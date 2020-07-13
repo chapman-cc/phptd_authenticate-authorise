@@ -43,6 +43,16 @@ class USER
         }
     }
 
+    public function verify()
+    {
+        $result = $this->getUser();
+        if (password_verify($this->password, $result['password'])) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
     public function getUser()
     {
         global $db;
