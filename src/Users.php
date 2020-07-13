@@ -1,5 +1,7 @@
 <?php
 
+use Ramsey\Uuid\Uuid;
+
 class USER
 {
     private $username;
@@ -25,12 +27,14 @@ class USER
         global $db;
 
         $hashed = password_hash($this->password, PASSWORD_BCRYPT);
+        $uuid = uniqid($this->username);
 
         try {
-            $query = "INSERT INTO users (username, password) VALUES (:username, :password)";
+            $query = "INSERT INTO users (username, password, uuid) VALUES (:username, :password, :uuid)";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':username', $this->username);
             $stmt->bindParam(':password', $hashed);
+            $stmt->bindParam(':uuid', $uuid);
             $result = $stmt->execute();
         } catch (PDOException $e) {
             throw $e;
