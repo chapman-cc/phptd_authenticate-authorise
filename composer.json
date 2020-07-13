@@ -1,4 +1,13 @@
 {
+    "name": "chapman/project8_task_auth",
+    "type": "project",
+    "license": "Private",
+    "authors": [
+        {
+            "name": "chapmanCheng",
+            "email": "chapboy1989@gmail.com"
+        }
+    ],
     "require": {
         "symfony/http-foundation": "^4.2"
     }
