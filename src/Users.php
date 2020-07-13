@@ -32,7 +32,7 @@ class USER
             $stmt->bindParam(':username', $this->username);
             $stmt->bindParam(':password', $hashed);
             $result = $stmt->execute();
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             throw $e;
         }
 
@@ -53,7 +53,7 @@ class USER
             $stmt->bindParam(':username', $this->username);
             $stmt->execute();
             return $stmt->fetch();
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             throw $e;
         }
     }
