@@ -1,6 +1,6 @@
 <?php
 
-class USER 
+class USER
 {
     private $username;
     private $password;
@@ -13,17 +13,17 @@ class USER
 
     public function __get($name)
     {
-        if (property_exists($this, $name)){
+        if (property_exists($this, $name)) {
             return $this->$name;
         } else {
             return false;
         }
     }
 
-    public function register() 
+    public function register()
     {
         global $db;
-        
+
         $hashed = password_hash($this->password, PASSWORD_BCRYPT);
 
         try {
@@ -31,27 +31,37 @@ class USER
             $stmt = $db->prepare($query);
             $stmt->bindParam(':username', $this->username);
             $stmt->bindParam(':password', $hashed);
-            $stmt->execute();
+            $result = $stmt->execute();
+        } catch (Exception $e) {
+            throw $e;
+        }
 
+        if ($result) {
+            return $this->getUser();
+        } else {
+            return false;
+        }
+    }
+
+    public function getUser()
+    {
+        global $db;
+
+        try {
+            $query = "SELECT * FROM users WHERE username = :username";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':username', $this->username);
+            $stmt->execute();
+            return $stmt->fetch();
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function checkForDuplicatedUsername() 
+    public function checkForDuplicatedUsername()
     {
-        global $db;
-        
-        try {    
-            $query = "SELECT * FROM users WHERE username = :username";
-            $stmt = $db->prepare($query);
-            $stmt->bindParam(':username', $this->username);
-            $stmt->execute();
-            $result = $stmt->fetch();
-        } catch (Exception $e) {
-            throw $e;
-        }
-        
+        $result = $this->getUser();
+
         if ($result) {
             return true;
         } else {
