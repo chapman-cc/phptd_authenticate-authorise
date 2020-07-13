@@ -1,14 +1,22 @@
 {
-    "name": "chapman/project8_task_auth",
-    "type": "project",
-    "license": "Private",
-    "authors": [
-        {
-            "name": "chapmanCheng",
-            "email": "chapboy1989@gmail.com"
-        }
-    ],
-    "require": {
-        "symfony/http-foundation": "^4.2"
+  "name": "chapman/project8_task_auth",
+  "type": "project",
+  "license": "Private",
+  "authors": [
+    {
+      "name": "chapmanCheng",
+      "email": "chapboy1989@gmail.com"
     }
+  ],
+  "require": {
+    "symfony/http-foundation": "^4.2",
+    "firebase/php-jwt": "^5.2",
+    "vlucas/phpdotenv": "^4"
+  },
+  "require-dev": {},
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
 }

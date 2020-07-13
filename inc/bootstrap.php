@@ -31,3 +31,19 @@ function redirect($path) {
     $response->send();
     exit;
 }
+
+// additional functions
+function flashError(string $message) {
+    global $session;
+    $session->getFlashBag()->add('error', $message);
+    return;
+}
+
+function flashSuccess(string $message) {
+    global $session;
+    $session->getFlashBag()->add('success', $message);
+    return;
+}
+
+// LOAD ENVIRONMENTAL VARIABLE
+ENV::loadENV();
