@@ -19,5 +19,5 @@ if ($user->checkForDuplicatedUsername()) {
 
 if ($newUser = $user->register()) {
     flashSuccess("New User $newUser[username] has been created.");
-    Response::redirectTo('/login.php');
+    Response::redirectTo('/', $regUser['uuid']);
 }
