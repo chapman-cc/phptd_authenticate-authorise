@@ -35,6 +35,15 @@ function redirect($path)
 }
 
 // additional functions
+function cookie($key = 'sub')
+{
+    if (request()->cookies->has('jwt')) {
+        $decoded = Firebase\JWT\JWT::decode(request()->cookies->get('jwt'), ENV::GET('SECRET_KEY'), [ENV::GET('ALG')]);
+        return $decoded->$key;
+    } else {
+        return false;
+    }
+}
 function flashError(string $message)
 {
     global $session;
