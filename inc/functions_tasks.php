@@ -5,8 +5,10 @@ function getTasks($where = null)
 {
     global $db;
     $query = "SELECT * FROM tasks ";
-    if (!empty($where)) $query .= "WHERE $where";
+    $query .= "WHERE user_uid='" . cookie() . "'";
+    if (!empty($where)) $query .= "AND $where";
     $query .= " ORDER BY id";
+
     try {
         $statement = $db->prepare($query);
         $statement->execute();
@@ -30,7 +32,8 @@ function getTask($task_id)
     global $db;
 
     try {
-        $statement = $db->prepare('SELECT id, task, status FROM tasks WHERE id=:id');
+        $uid = cookie();
+        $statement = $db->prepare("SELECT id, task, status FROM tasks WHERE id=:id AND user_uid='$uid'");
         $statement->bindParam('id', $task_id);
         $statement->execute();
         $task = $statement->fetch();
@@ -43,11 +46,11 @@ function getTask($task_id)
 function createTask($data)
 {
     global $db;
-
     try {
-        $statement = $db->prepare('INSERT INTO tasks (task, status) VALUES (:task, :status)');
+        $statement = $db->prepare('INSERT INTO tasks (task, status, user_uid) VALUES (:task, :status, :user_uid)');
         $statement->bindParam('task', $data['task']);
         $statement->bindParam('status', $data['status']);
+        $statement->bindParam('user_uid', $data['user_uid']);
         $statement->execute();
     } catch (Exception $e) {
         echo "Error!: " . $e->getMessage() . "<br />";
@@ -61,7 +64,8 @@ function updateTask($data)
 
     try {
         getTask($data['task_id']);
-        $statement = $db->prepare('UPDATE tasks SET task=:task, status=:status WHERE id=:id');
+        $uid = cookie();
+        $statement = $db->prepare("UPDATE tasks SET task=:task, status=:status WHERE id=:id AND user_uid='$uid'");
         $statement->bindParam('task', $data['task']);
         $statement->bindParam('status', $data['status']);
         $statement->bindParam('id', $data['task_id']);
@@ -78,7 +82,8 @@ function updateStatus($data)
 
     try {
         getTask($data['task_id']);
-        $statement = $db->prepare('UPDATE tasks SET status=:status WHERE id=:id');
+        $uid = cookie();
+        $statement = $db->prepare("UPDATE tasks SET status=:status WHERE id=:id AND user_uid='$uid'");
         $statement->bindParam('status', $data['status']);
         $statement->bindParam('id', $data['task_id']);
         $statement->execute();
@@ -94,7 +99,8 @@ function deleteTask($task_id)
 
     try {
         getTask($task_id);
-        $statement = $db->prepare('DELETE FROM tasks WHERE id=:id');
+        $uid = cookie();
+        $statement = $db->prepare("DELETE FROM tasks WHERE id=:id AND user_uid = '$uid'");
         $statement->bindParam('id', $task_id);
         $statement->execute();
     } catch (Exception $e) {
