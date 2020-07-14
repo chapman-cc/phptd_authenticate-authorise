@@ -1,6 +1,11 @@
 <?php
 require_once 'inc/bootstrap.php';
 
+if (!cookie()) {
+    flashError("You are not authorized to view this page");
+    Response::redirectTo("/");
+}
+
 $pageTitle = "Task | Time Tracker";
 $page = "task";
 
@@ -15,12 +20,12 @@ include 'inc/header.php';
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
             <h1 class="actions-header"><?php
-            if (!empty($task_id)) {
-                echo "Update";
-            } else {
-                echo "Add";
-            }
-            ?> Task</h1>
+                                        if (!empty($task_id)) {
+                                            echo "Update";
+                                        } else {
+                                            echo "Add";
+                                        }
+                                        ?> Task</h1>
             <?php
             if (isset($error_message)) {
                 echo "<p class='message'>$error_message</p>";
@@ -32,7 +37,7 @@ include 'inc/header.php';
                         <th><label for="task">Task<span class="required">*</span></label></th>
                         <td><input type="text" id="task" name="task" value="<?php echo htmlspecialchars($task); ?>" /></td>
                     </tr>
-                   </table>
+                </table>
                 <?php
                 if (!empty($task_id)) {
                     echo "<input type='hidden' name='action' value='update' />";

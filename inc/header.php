@@ -55,15 +55,16 @@
           <span class="logo-name">Personal Todo App</span>
         </a>
       </h1>
-
-      <ul class="nav navbar-left">
-        <li class="nav-item tasks<?php if ($page == "tasks") {
+      <?php if (cookie()) : ?>
+        <ul class="nav navbar-left">
+          <li class="nav-item tasks<?php if ($page == "tasks") {
+                                      echo " on";
+                                    } ?>"><a class="nav-link" href="task_list.php">View Tasks</a></li>
+          <li class="nav-item task<?php if ($page == "task") {
                                     echo " on";
-                                  } ?>"><a class="nav-link" href="task_list.php">View Tasks</a></li>
-        <li class="nav-item task<?php if ($page == "task") {
-                                  echo " on";
-                                } ?>"><a class="nav-link" href="task.php">Add Tasks</a></li>
-      </ul>
+                                  } ?>"><a class="nav-link" href="task.php">Add Tasks</a></li>
+        </ul>
+      <?php endif; ?>
       <ul class="nav">
         <?php if (cookie()) : ?>
           <li class="nav-item task<?php if ($page == "account") {
