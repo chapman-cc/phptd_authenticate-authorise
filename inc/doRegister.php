@@ -9,15 +9,15 @@ $user = new USER(
 
 if ($user->password !== request()->get('confirm_password')) {
     flashError('Registration Error');
-    redirect('/register.php');
+    Response::redirectTo('/register.php');
 }
 
 if ($user->checkForDuplicatedUsername()) {
     flashError('User exists already.');
-    redirect('/login.php');
+    Response::redirectTo('/login.php');
 }
 
 if ($newUser = $user->register()) {
-    flashSuccess("New User " . $newUser["username"] . " has been created.");
-    redirect('/login.php');
+    flashSuccess("New User $newUser[username] has been created.");
+    Response::redirectTo('/login.php');
 }

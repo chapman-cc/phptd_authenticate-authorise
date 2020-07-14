@@ -9,7 +9,7 @@ $user = new USER(
 
 if (!$user->checkForDuplicatedUsername()) {
     flashError('User not exist. Please sign up');
-    redirect('/register.php');
+    Response::redirectTo('/register.php');
 }
 
 if ($regUser = $user->verify()) {
@@ -18,5 +18,5 @@ if ($regUser = $user->verify()) {
     Response::redirectTo('/', $regUser['uuid']);
 } else {
     flashError('Login error');
-    redirect('/login.php');
+    Response::redirectTo('/login.php');
 }
