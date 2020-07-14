@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../inc/bootstrap.php';
 
-$user = new USER(
+$user = new User(
     request()->request->getAlnum('username'),
     request()->request->getAlnum('password'),
 );

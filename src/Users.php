@@ -2,7 +2,7 @@
 
 use Ramsey\Uuid\Uuid;
 
-class USER
+class User
 {
     private $username;
     private $password;
@@ -47,6 +47,29 @@ class USER
         }
     }
 
+    public function updatePassword()
+    {
+        global $db;
+
+        $hashed = password_hash($this->password, PASSWORD_BCRYPT);
+
+        try {
+            $query = "UPDATE users SET password = :password WHERE username = :username";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':username', $this->username);
+            $stmt->bindParam(':password', $hashed);
+            $result = $stmt->execute();
+        } catch (PDOException $e) {
+            throw $e;
+        }
+
+        if ($result) {
+            return $this->getUser();
+        } else {
+            return false;
+        }
+    }
+
     public function verify()
     {
         $result = $this->getUser();
@@ -71,6 +94,22 @@ class USER
             throw $e;
         }
     }
+
+    public static function getUserByUUID($uuid)
+    {
+        global $db;
+
+        try {
+            $query = "SELECT * FROM users WHERE uuid = :uuid";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':uuid', $uuid);
+            $stmt->execute();
+            return $stmt->fetch();
+        } catch (PDOException $e) {
+            throw $e;
+        }
+    }
+
 
     public function checkForDuplicatedUsername()
     {
