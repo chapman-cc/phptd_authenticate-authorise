@@ -74,12 +74,6 @@ class USER
 
     public function checkForDuplicatedUsername()
     {
-        $result = $this->getUser();
-
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getUser() ?  true : false;
     }
 }
