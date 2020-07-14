@@ -14,7 +14,6 @@ if (!$user->checkForDuplicatedUsername()) {
 
 if ($regUser = $user->verify()) {
     flashSuccess("Welcome Back $regUser[username].");
-    flashSuccess("JWT $regUser[uuid] Set");
     Response::redirectTo('/', $regUser['uuid']);
 } else {
     flashError('Login error');
