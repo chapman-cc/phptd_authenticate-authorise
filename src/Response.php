@@ -8,24 +8,35 @@ class Response extends BaseResponse
 {
     public static function redirectTo($path, $jwt = null)
     {
-        $response = self::create(null, self::HTTP_FOUND, ['Location' => $path]);
+        $response = self::create(null, self::HTTP_TEMPORARY_REDIRECT, ['Location' => $path]);
         if (!is_null($jwt)) {
             $response->headers->setcookie(self::_newCookie($jwt));
+        }
+        if ($jwt == 'deleteCookie') {
+            $response->headers->setcookie(self::_deleteCookie());
         }
 
         return $response->send();
     }
 
-    private static function _newCookie($jwt)
+    private static function _newCookie(string $jwt)
     {
         return BaseCookie::create(
             "jwt",
             self::_newJWT($jwt),
-            time() * ENV::GET('COOKIE_EXPIRE'),
+            time() + ENV::GET('COOKIE_EXPIRE'),
             ENV::GET('COOKIE_PATH'),
             ENV::GET('COOKIE_DOMAIN'),
             null,
             TRUE
+        );
+    }
+    private static function _deleteCookie()
+    {
+        return BaseCookie::create(
+            'jwt',
+            '',
+            time() - ENV::GET('COOKIE_EXPIRE')
         );
     }
     private static function _newJWT($sub)
